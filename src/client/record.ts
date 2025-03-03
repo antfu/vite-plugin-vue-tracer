@@ -10,15 +10,10 @@ export type PositionInfo = [
 ]
 
 interface Store {
+  hasData: boolean
   vnodeToPos: WeakMap<any, PositionInfo>
   fileToVNode: Map<string, WeakSet<any>>
   posToVNode: Map<string, Map<number, Map<number, WeakSet<any>>>>
-}
-
-declare global {
-  interface globalThis {
-    [KEY_GLOBAL]: Store
-  }
 }
 
 // Storing to global to allow multiple instanace to coexist
@@ -26,6 +21,7 @@ declare global {
 let _store: Store = globalThis[KEY_GLOBAL]
 if (!_store) {
   _store = {
+    hasData: false,
     vnodeToPos: new WeakMap(),
     fileToVNode: new Map(),
     posToVNode: new Map(),
@@ -43,6 +39,9 @@ if (!_store) {
 export function recordPosition(source: string, line: number, column: number, node: VNode): VNode {
   if (!node || typeof node === 'string' || typeof node === 'number')
     return node
+
+  if (!_store.hasData)
+    _store.hasData = true
 
   const props = node.props ||= {}
   _store.vnodeToPos.set(props, [source, line, column])
@@ -64,7 +63,7 @@ export function recordPosition(source: string, line: number, column: number, nod
   return node
 }
 
-export function getPosition(node: VNode): PositionInfo | undefined {
+function getPositionFromVNode(node: VNode): PositionInfo | undefined {
   const props = node?.props
   if (props)
     return _store.vnodeToPos.get(props)
@@ -104,6 +103,7 @@ export class ElementTraceInfo {
     const fileVNodeSet = _store.fileToVNode.get(pos[0])
     if (!fileVNodeSet)
       return
+    // TODO: any way to improve the performance?
     const sameFile = fileVNodeSet
       ? Array.from(document.querySelectorAll('*'))
           .filter(e => e !== this.el && (e as any).__vnode?.props && fileVNodeSet.has((e as any).__vnode?.props))
@@ -124,6 +124,7 @@ export class ElementTraceInfo {
     const posVNodeSet = _store.posToVNode.get(pos[0])?.get(pos[1])?.get(pos[2])
     if (!posVNodeSet)
       return
+    // TODO: any way to improve the performance?
     const samePos = posVNodeSet
       ? Array.from(document.querySelectorAll(this.vnode.type))
           .filter(e => e !== this.el && (e as any).__vnode?.props && posVNodeSet.has((e as any).__vnode?.props))
@@ -142,7 +143,7 @@ export function findTraceFromElement(el?: Element | null): ElementTraceInfo | un
 export function findTraceFromVNode(vnode?: VNode, el?: Element): ElementTraceInfo | undefined {
   if (!vnode)
     return
-  const pos = getPosition(vnode)
+  const pos = getPositionFromVNode(vnode)
   if (!pos)
     return
   return new ElementTraceInfo(pos, (el ?? vnode?.el ?? undefined) as any, vnode)
@@ -158,4 +159,8 @@ export function findTraceAtPointer(e: { x: number, y: number }): ElementTraceInf
     if (match)
       return match
   }
+}
+
+export function hasData(): boolean {
+  return _store.hasData
 }

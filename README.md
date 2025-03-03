@@ -53,6 +53,7 @@ Of if you want headless APIs, import `vite-plugin-vue-tracer/client/record` inst
 if (import.meta.hot) {
   import('vite-plugin-vue-tracer/client/record')
     .then(({
+      hasData,
       findTraceFromElement,
       findraceFromVNode,
       findTraceAtPointer,
