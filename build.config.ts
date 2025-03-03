@@ -6,7 +6,6 @@ export default defineBuildConfig({
     'src/client/record',
     'src/client/listeners',
     'src/client/overlay',
-    'src/client/vue-inspector-compat',
   ],
   declaration: 'node16',
   clean: true,

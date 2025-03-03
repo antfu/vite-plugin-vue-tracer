@@ -22,8 +22,7 @@
     ".": "./dist/index.mjs",
     "./client/record": "./dist/client/record.mjs",
     "./client/overlay": "./dist/client/overlay.mjs",
-    "./client/listeners": "./dist/client/listeners.mjs",
-    "./client/vue-inspector-compat": "./dist/client/vue-inspector-compat.mjs"
+    "./client/listeners": "./dist/client/listeners.mjs"
   },
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
