@@ -34,7 +34,10 @@ In the your entry file, add the following code:
 ```ts
 // Only apply in development
 if (import.meta.hot) {
-  import('vite-plugin-vue-tracer/client/overlay').then(({ events, isEnabled }) => {
+  import('vite-plugin-vue-tracer/client/overlay').then(({ events, state }) => {
+    // Enables the overlay
+    state.isEnabled = true
+
     events.on('hover', (info) => {
       // ...
     })
@@ -42,6 +45,7 @@ if (import.meta.hot) {
     events.on('click', (info) => {
       // ...
       openInEditor(info.fullpath) // 'src/app.vue:10:1'
+      state.isEnabled = false
     })
   })
 }

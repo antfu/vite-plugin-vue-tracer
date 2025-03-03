@@ -1,21 +1,24 @@
+import type { Ref } from 'vue'
 import type { ElementTraceInfo } from './record'
 import { reactive, watchEffect } from 'vue'
-import { events, lastMatchedElement } from './listeners'
+import { events, isEnabled, lastMatchedElement } from './listeners'
 
 export * from './listeners'
 
 export const state = reactive<{
-  show: boolean
-  animated: boolean
-  focused: boolean
+  isEnabled: Ref<boolean>
+  isVisible: boolean
+  isAnimated: boolean
+  isFocused: boolean
   main?: ElementTraceInfo
   sub: {
     rects?: { id: string, rect: DOMRect }[]
   }
 }>({
-  show: false,
-  focused: false,
-  animated: true,
+  isEnabled,
+  isVisible: false,
+  isFocused: false,
+  isAnimated: true,
   sub: {},
 })
 
@@ -88,17 +91,17 @@ function createOverlay(): void {
   document.body.appendChild(overlay)
 
   watchEffect(() => {
-    overlay.style.transition = state.animated ? `all ${ANIMATE_DURATION}` : 'none'
-    mainText.style.transition = state.animated ? `all ${ANIMATE_DURATION}` : 'none'
-    mainRect.style.transition = state.animated ? `all ${ANIMATE_DURATION}` : 'none'
-    overlay.style.opacity = state.show ? '1' : '0'
+    overlay.style.transition = state.isAnimated ? `all ${ANIMATE_DURATION}` : 'none'
+    mainText.style.transition = state.isAnimated ? `all ${ANIMATE_DURATION}` : 'none'
+    mainRect.style.transition = state.isAnimated ? `all ${ANIMATE_DURATION}` : 'none'
+    overlay.style.opacity = state.isVisible ? '1' : '0'
   })
 
   watchEffect(() => {
     if (state.main && state.main.rect) {
       const rect = state.main.rect
       mainRect.style.opacity = '1'
-      if (state.focused) {
+      if (state.isFocused) {
         mainRect.setAttribute('rx', '8')
         mainRect.setAttribute('ry', '8')
         mainRect.setAttribute('x', String(rect.left - PADDING_FOCUSED))
@@ -116,8 +119,8 @@ function createOverlay(): void {
         mainRect.setAttribute('height', String(rect.height))
         mainRect.style.filter = ''
       }
-      mainRect.style.fill = state.focused ? 'transparent' : '#1972'
-      mainText.style.opacity = state.focused ? '0' : '1'
+      mainRect.style.fill = state.isFocused ? 'transparent' : '#1972'
+      mainText.style.opacity = state.isFocused ? '0' : '1'
       mainTextTag.textContent = ''
       let tagName = ''
       if (state.main?.vnode?.type) {
@@ -154,7 +157,7 @@ function createOverlay(): void {
         svg.appendChild(cover)
         subMap.set(id, cover)
       }
-      cover.style.transition = state.animated ? `all ${ANIMATE_DURATION}` : 'none'
+      cover.style.transition = state.isAnimated ? `all ${ANIMATE_DURATION}` : 'none'
       cover.setAttribute('x', String(rect.left))
       cover.setAttribute('y', String(rect.top))
       cover.setAttribute('width', String(rect.width))
@@ -184,13 +187,13 @@ function getElementId(el: Element): string {
 
 function update(result: ElementTraceInfo | undefined): void {
   if (!result) {
-    state.show = false
+    state.isVisible = false
     state.sub.rects = undefined
     state.main = undefined
     return
   }
 
-  state.show = true
+  state.isVisible = true
   state.main = result
 
   const samePos = result.getElementsSamePosition()
@@ -207,11 +210,11 @@ function init(): void {
     update(result)
   })
   document.addEventListener('scroll', () => {
-    if (state.show)
+    if (state.isVisible)
       update(lastMatchedElement.value)
   })
   window.addEventListener('resize', () => {
-    if (state.show)
+    if (state.isVisible)
       update(lastMatchedElement.value)
   })
 }
