@@ -4,6 +4,14 @@
     "lib": ["ESNext", "DOM"],
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "paths": {
+      "vite-plugin-vue-tracer/client/listeners": [
+        "./src/client/listeners.ts"
+      ],
+      "vite-plugin-vue-tracer/client/record": [
+        "./src/client/record.ts"
+      ]
+    },
     "resolveJsonModule": true,
     "strict": true,
     "strictNullChecks": true,
