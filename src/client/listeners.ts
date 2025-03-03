@@ -8,10 +8,10 @@ export * from './record'
 export const lastMatchedElement = shallowRef<ElementTraceInfo | undefined>()
 
 export const events = createNanoEvents<{
-  hover: (info: ElementTraceInfo | undefined) => void
+  hover: (info: ElementTraceInfo | undefined, event: MouseEvent | PointerEvent) => void
   click: (info: ElementTraceInfo, event: MouseEvent | PointerEvent) => void
-  enable: () => void
-  disable: () => void
+  enabled: () => void
+  disabled: () => void
 }>()
 
 export const isEnabled = customRef(() => {
@@ -26,9 +26,9 @@ export const isEnabled = customRef(() => {
         return
       value.value = newValue
       if (newValue)
-        events.emit('enable')
+        events.emit('enabled')
       else
-        events.emit('disable')
+        events.emit('disabled')
     },
   }
 })
@@ -43,7 +43,7 @@ if (typeof document !== 'undefined') {
     if (result?.el === lastMatchedElement.value?.el)
       return
     lastMatchedElement.value = result
-    events.emit('hover', result)
+    events.emit('hover', result, e)
   })
 
   document.addEventListener('click', (e) => {
@@ -52,7 +52,6 @@ if (typeof document !== 'undefined') {
 
     const result = findTraceAtPointer({ x: e.clientX, y: e.clientY })
     if (result) {
-      // TODO: not working
       events.emit('click', result, e)
       e.preventDefault()
       e.stopPropagation()
