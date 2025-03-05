@@ -71,6 +71,15 @@ if (import.meta.hot) {
 }
 ```
 
+## References
+
+### Exports
+
+- `vite-plugin-vue-tracer` - The Vite plugin entry, should be used in `vite.config.ts`
+- `vite-plugin-vue-tracer/client/record` - The client entry for recording the trace data, this will be automatically injected into each component by the plugin. You don't normally need to import this.
+- `vite-plugin-vue-tracer/client/listener` - The client entry for adding event listeners to the DOM and listening to the mouse events. It expose a ref `isEnabled` to control if the listeners are active. A `events` object is exposed for listening to those events. This entry is purely headless, does not come with any UI or styling.
+- `vite-plugin-vue-tracer/client/overlay` - The builtin overlay UI for easier to use. A reactive `state` object is exposed to control the overlay's state. If you want to build your own UI, you can use the `listener` entry instead.
+
 ## Sponsors
 
 <p align="center">
