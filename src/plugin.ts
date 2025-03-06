@@ -3,7 +3,7 @@ import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { walk } from 'estree-walker'
 import MagicString from 'magic-string'
-import { dirname, relative } from 'pathe'
+import { dirname, isAbsolute, relative } from 'pathe'
 import { SourceMapConsumer } from 'source-map-js'
 
 const functions = [
@@ -47,7 +47,10 @@ export function VueTracer(options?: VueTracerOptions): Plugin | undefined {
   const getRecordPath = (id: string): string => {
     if (!resolveRecordEntryPath)
       return 'vite-plugin-vue-tracer/client/record'
-    return relative(dirname(id), pathRecordDist)
+    let related = relative(dirname(id), pathRecordDist)
+    if (!related.startsWith('./') && !isAbsolute(related))
+      related = `./${related}`
+    return related
   }
 
   return {
