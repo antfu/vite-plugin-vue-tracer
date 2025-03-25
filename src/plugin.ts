@@ -1,7 +1,7 @@
 import type { Plugin } from 'vite'
 import process from 'node:process'
-import { fileURLToPath } from 'node:url'
 import { walk } from 'estree-walker'
+import { resolveModulePath } from 'exsolve'
 import MagicString from 'magic-string'
 import { dirname, isAbsolute, relative } from 'pathe'
 import { SourceMapConsumer } from 'source-map-js'
@@ -43,7 +43,7 @@ export function VueTracer(options?: VueTracerOptions): Plugin | undefined {
   if (enabled === false)
     return
 
-  const pathRecordDist = fileURLToPath(import.meta.resolve('vite-plugin-vue-tracer/client/record'))
+  const pathRecordDist = resolveModulePath('vite-plugin-vue-tracer/client/record')
   const getRecordPath = (id: string): string => {
     if (!resolveRecordEntryPath)
       return 'vite-plugin-vue-tracer/client/record'
