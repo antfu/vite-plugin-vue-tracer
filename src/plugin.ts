@@ -43,7 +43,7 @@ export function VueTracer(options?: VueTracerOptions): Plugin | undefined {
   if (enabled === false)
     return
 
-  const pathRecordDist = resolveModulePath('vite-plugin-vue-tracer/client/record')
+  const pathRecordDist = resolveModulePath('vite-plugin-vue-tracer/client/record', { from: import.meta.url })
   const getRecordPath = (id: string): string => {
     if (!resolveRecordEntryPath)
       return 'vite-plugin-vue-tracer/client/record'
