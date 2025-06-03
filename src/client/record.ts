@@ -14,6 +14,7 @@ interface Store {
   vnodeToPos: WeakMap<any, PositionInfo>
   fileToVNode: Map<string, WeakSet<any>>
   posToVNode: Map<string, Map<number, Map<number, WeakSet<any>>>>
+  events?: any
 }
 
 // Storing to global to allow multiple instanace to coexist
@@ -31,6 +32,13 @@ if (!_store) {
     configurable: true,
     enumerable: false,
   })
+}
+
+/**
+ * @internal
+ */
+export function getInternalStore(): Store {
+  return _store
 }
 
 /**

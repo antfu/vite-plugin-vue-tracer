@@ -1,18 +1,23 @@
+import type { Emitter } from 'nanoevents'
 import type { ElementTraceInfo } from './record'
 import { createNanoEvents } from 'nanoevents'
 import { customRef, ref, shallowRef } from 'vue'
-import { findTraceAtPointer } from './record'
+import { findTraceAtPointer, getInternalStore } from './record'
 
 export * from './record'
 
 export const lastMatchedElement = shallowRef<ElementTraceInfo | undefined>()
 
-export const events = createNanoEvents<{
+const _store = getInternalStore()
+
+export interface Events {
   hover: (info: ElementTraceInfo | undefined, event: MouseEvent | PointerEvent) => void
   click: (info: ElementTraceInfo, event: MouseEvent | PointerEvent) => void
   enabled: () => void
   disabled: () => void
-}>()
+}
+
+export const events: Emitter<Events> = _store.events ||= createNanoEvents<Events>()
 
 export const isEnabled = customRef(() => {
   const value = ref(false)
