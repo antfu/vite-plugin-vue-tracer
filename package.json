@@ -2,7 +2,7 @@
   "name": "vite-plugin-vue-tracer",
   "type": "module",
   "version": "0.1.4",
-  "packageManager": "pnpm@10.11.1",
+  "packageManager": "pnpm@10.12.4",
   "description": "Tracer for the source code of elements and vdoms in Vue SFC",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -43,7 +43,7 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "peerDependencies": {
-    "vite": "^6.0.0",
+    "vite": "^6.0.0 || ^7.0.0",
     "vue": "^3.5.0"
   },
   "dependencies": {
