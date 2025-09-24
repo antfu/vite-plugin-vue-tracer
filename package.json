@@ -2,7 +2,7 @@
   "name": "vite-plugin-vue-tracer",
   "type": "module",
   "version": "1.0.0",
-  "packageManager": "pnpm@10.12.4",
+  "packageManager": "pnpm@10.17.1",
   "description": "Tracer for the source code of elements and vdoms in Vue SFC",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -37,7 +37,7 @@
     "play": "nr -C playground play",
     "prepare": "simple-git-hooks",
     "prepublishOnly": "nr build",
-    "release": "bumpp && pnpm publish",
+    "release": "bumpp",
     "start": "tsx src/index.ts",
     "test": "vitest",
     "typecheck": "vue-tsc --noEmit"
