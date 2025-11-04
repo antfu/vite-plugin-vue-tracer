@@ -10,6 +10,12 @@
       ],
       "vite-plugin-vue-tracer/client/record": [
         "./src/client/record.ts"
+      ],
+      "vite-plugin-vue-tracer/client/overlay": [
+        "./src/client/overlay.ts"
+      ],
+      "vite-plugin-vue-tracer/client/vite-devtools": [
+        "./src/client/vite-devtools.ts"
       ]
     },
     "resolveJsonModule": true,
