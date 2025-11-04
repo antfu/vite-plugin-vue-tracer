@@ -1,4 +1,5 @@
 import { fileURLToPath } from 'node:url'
+import { DevTools } from '@vitejs/devtools'
 import Vue from '@vitejs/plugin-vue'
 import UnoCSS from 'unocss/vite'
 import { defineConfig } from 'vite'
@@ -9,6 +10,7 @@ const r = (filepath: string) => fileURLToPath(new URL(filepath, import.meta.url)
 
 export default defineConfig({
   plugins: [
+    DevTools(),
     Vue(),
     VueTracer({
       resolveRecordEntryPath: false,
@@ -21,7 +23,7 @@ export default defineConfig({
       'vite-plugin-vue-tracer/client/record': r('../src/client/record.ts'),
       'vite-plugin-vue-tracer/client/listeners': r('../src/client/listeners.ts'),
       'vite-plugin-vue-tracer/client/overlay': r('../src/client/overlay.ts'),
-      'vite-plugin-vue-tracer/client/vue-inspector-compat': r('../src/client/vue-inspector-compat.ts'),
+      'vite-plugin-vue-tracer/client/vite-devtools': r('../src/client/vite-devtools.ts'),
     },
   },
 })

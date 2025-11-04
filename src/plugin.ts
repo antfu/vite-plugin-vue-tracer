@@ -1,3 +1,4 @@
+import type {} from '@vitejs/devtools-kit'
 import type { Plugin } from 'vite'
 import process from 'node:process'
 import { walk } from 'estree-walker'
@@ -125,6 +126,21 @@ export function VueTracer(options?: VueTracerOptions): Plugin | undefined {
         code: s.toString(),
         map: s.generateMap({ hires: true }),
       }
+    },
+    // Experimental DevTools integration
+    devtools: {
+      setup(ctx) {
+        ctx.docks.register({
+          id: 'vue-tracer',
+          title: 'Vue Tracer',
+          icon: 'ph:crosshair-simple-duotone',
+          type: 'action',
+          import: {
+            importFrom: 'vite-plugin-vue-tracer/client/vite-devtools',
+            importName: 'default',
+          },
+        })
+      },
     },
   }
 }

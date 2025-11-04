@@ -22,7 +22,8 @@
     ".": "./dist/index.mjs",
     "./client/record": "./dist/client/record.mjs",
     "./client/overlay": "./dist/client/overlay.mjs",
-    "./client/listeners": "./dist/client/listeners.mjs"
+    "./client/listeners": "./dist/client/listeners.mjs",
+    "./client/vite-devtools": "./dist/client/vite-devtools.mjs"
   },
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
@@ -58,6 +59,8 @@
     "@antfu/ni": "catalog:dev",
     "@antfu/utils": "catalog:dev",
     "@types/node": "catalog:dev",
+    "@vitejs/devtools": "catalog:dev",
+    "@vitejs/devtools-kit": "catalog:dev",
     "bumpp": "catalog:dev",
     "eslint": "catalog:dev",
     "lint-staged": "catalog:dev",
