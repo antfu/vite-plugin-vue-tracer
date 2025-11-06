@@ -33,12 +33,20 @@ export interface VueTracerOptions {
    * @default true
    */
   resolveRecordEntryPath?: boolean
+
+  /**
+   * Enable Vite DevTools integration.
+   *
+   * @default true
+   */
+  viteDevtools?: boolean
 }
 
 export function VueTracer(options?: VueTracerOptions): Plugin | undefined {
   let {
     enabled = 'dev',
     resolveRecordEntryPath = true,
+    viteDevtools = true,
   } = options || {}
 
   if (enabled === false)
@@ -127,20 +135,25 @@ export function VueTracer(options?: VueTracerOptions): Plugin | undefined {
         map: s.generateMap({ hires: true }),
       }
     },
-    // Experimental DevTools integration
-    devtools: {
-      setup(ctx) {
-        ctx.docks.register({
-          id: 'vue-tracer',
-          title: 'Vue Tracer',
-          icon: 'ph:crosshair-simple-duotone',
-          type: 'action',
-          import: {
-            importFrom: 'vite-plugin-vue-tracer/client/vite-devtools',
-            importName: 'default',
+
+    // Vite DevTools integration
+    ...viteDevtools
+      ? {
+          devtools: {
+            setup(ctx) {
+              ctx.docks.register({
+                id: 'vue-tracer',
+                title: 'Vue Tracer',
+                icon: 'ph:crosshair-simple-duotone',
+                type: 'action',
+                action: {
+                  importFrom: 'vite-plugin-vue-tracer/client/vite-devtools',
+                  importName: 'default',
+                },
+              })
+            },
           },
-        })
-      },
-    },
+        }
+      : {},
   }
 }
