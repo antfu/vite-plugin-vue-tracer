@@ -5,14 +5,12 @@ import { state } from 'vite-plugin-vue-tracer/client/overlay'
 
 export default function enable(ctx: DockClientScriptContext): void {
   events.on('click', (e) => {
-    const base = import.meta.env?.BASE_URL || '/'
-    fetch(`${base}__open-in-editor?file=${e.pos[0]}:${e.pos[1]}:${e.pos[2]}`)
-    isEnabled.value = false
+    ctx.rpc['vite:core:open-in-editor'](`${e.pos[0]}:${e.pos[1]}:${e.pos[2]}`)
     state.isVisible = false
   })
 
   isEnabled.value = !isEnabled.value
   state.isVisible = isEnabled.value
-  ctx.hidePanel()
-  ctx.dockState = isEnabled.value ? 'active' : 'inactive'
+
+  ctx.docks.switchEntry(isEnabled.value ? ctx.current.entryMeta.id : null)
 }

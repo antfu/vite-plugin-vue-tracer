@@ -13,6 +13,7 @@ export default defineConfig({
     DevTools(),
     Vue(),
     VueTracer({
+      viteDevtools: true,
       resolveRecordEntryPath: false,
     }),
     Inspect(),
