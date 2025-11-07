@@ -1,7 +1,7 @@
 {
   "name": "vite-plugin-vue-tracer",
   "type": "module",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "packageManager": "pnpm@10.20.0",
   "description": "Tracer for the source code of elements and vdoms in Vue SFC",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
