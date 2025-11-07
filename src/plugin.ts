@@ -37,7 +37,7 @@ export interface VueTracerOptions {
   /**
    * Enable Vite DevTools integration.
    *
-   * @default true
+   * @default false
    */
   viteDevtools?: boolean
 }
@@ -46,7 +46,7 @@ export function VueTracer(options?: VueTracerOptions): Plugin | undefined {
   let {
     enabled = 'dev',
     resolveRecordEntryPath = true,
-    viteDevtools = true,
+    viteDevtools = false,
   } = options || {}
 
   if (enabled === false)
