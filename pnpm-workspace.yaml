@@ -15,8 +15,8 @@ catalogs:
     '@types/node': ^24.10.0
     '@unocss/preset-mini': ^66.5.5
     '@unocss/reset': ^66.5.5
-    '@vitejs/devtools': ^0.0.0-alpha.14
-    '@vitejs/devtools-kit': ^0.0.0-alpha.14
+    '@vitejs/devtools': ^0.0.0-alpha.16
+    '@vitejs/devtools-kit': ^0.0.0-alpha.16
     '@vitejs/plugin-vue': ^6.0.1
     bumpp: ^10.3.1
     eslint: ^9.39.1
