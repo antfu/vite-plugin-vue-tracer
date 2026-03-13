@@ -113,6 +113,7 @@ export class ElementTraceInfo {
       return
     // TODO: any way to improve the performance?
     const sameFile = fileVNodeSet
+      // eslint-disable-next-line e18e/prefer-spread-syntax
       ? Array.from(document.querySelectorAll('*'))
           .filter(e => e !== this.el && (e as any).__vnode?.props && fileVNodeSet.has((e as any).__vnode?.props))
       : []
@@ -134,6 +135,7 @@ export class ElementTraceInfo {
       return
     // TODO: any way to improve the performance?
     const samePos = posVNodeSet
+      // eslint-disable-next-line e18e/prefer-spread-syntax
       ? Array.from(document.querySelectorAll(this.vnode.type))
           .filter(e => e !== this.el && (e as any).__vnode?.props && posVNodeSet.has((e as any).__vnode?.props))
       : []
