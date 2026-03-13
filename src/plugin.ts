@@ -83,7 +83,7 @@ export function VueTracer(options?: VueTracerOptions): Plugin | undefined {
         return
 
       // Only transform Vue compiled template
-      if (!code.match(testRe))
+      if (!testRe.test(code))
         return
 
       // Already transformed
@@ -94,7 +94,7 @@ export function VueTracer(options?: VueTracerOptions): Plugin | undefined {
         const lines = code.slice(0, index).split('\n')
         return {
           line: lines.length,
-          column: lines[lines.length - 1].length,
+          column: lines.at(-1)!.length,
         }
       }
 
@@ -105,7 +105,7 @@ export function VueTracer(options?: VueTracerOptions): Plugin | undefined {
       const ast = this.parse(code)
       let hit = false
 
-      walk(ast, {
+      walk(ast as any, {
         enter(node) {
           if (node.type !== 'CallExpression' || node.callee.type !== 'Identifier')
             return

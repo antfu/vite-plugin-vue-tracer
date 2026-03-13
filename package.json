@@ -2,7 +2,7 @@
   "name": "vite-plugin-vue-tracer",
   "type": "module",
   "version": "1.2.0",
-  "packageManager": "pnpm@10.26.0",
+  "packageManager": "pnpm@10.32.1",
   "description": "Tracer for the source code of elements and vdoms in Vue SFC",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -61,9 +61,10 @@
     "@types/node": "catalog:dev",
     "@vitejs/devtools": "catalog:dev",
     "@vitejs/devtools-kit": "catalog:dev",
+    "baseline-browser-mapping": "catalog:dev",
     "bumpp": "catalog:dev",
     "eslint": "catalog:dev",
-    "lint-staged": "catalog:dev",
+    "nano-staged": "catalog:dev",
     "nanoevents": "catalog:frontend",
     "simple-git-hooks": "catalog:dev",
     "tsx": "catalog:dev",
@@ -76,9 +77,9 @@
     "vue-tsc": "catalog:dev"
   },
   "simple-git-hooks": {
-    "pre-commit": "pnpm lint-staged"
+    "pre-commit": "pnpm nano-staged"
   },
-  "lint-staged": {
+  "nano-staged": {
     "*": "eslint --fix"
   }
 }
