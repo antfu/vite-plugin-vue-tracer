@@ -87,8 +87,8 @@ catalogs:
       specifier: ^1.0.8
       version: 1.0.8
     magic-string:
-      specifier: ^0.30.21
-      version: 0.30.21
+      specifier: ^1.1.0
+      version: 1.1.0
     pathe:
       specifier: ^2.0.3
       version: 2.0.3
@@ -108,7 +108,7 @@ importers:
         version: 1.0.8
       magic-string:
         specifier: catalog:prod
-        version: 0.30.21
+        version: 1.1.0
       pathe:
         specifier: catalog:prod
         version: 2.0.3
@@ -2717,6 +2717,9 @@ packages:
 
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
+
+  magic-string@1.1.0:
+    resolution: {integrity: sha512-kS3VHe0nEPST2saQV4Rbkchcd3UBRkVTQHo1D3h/ZTwFDhai/mfKkmtPAtD129EOI7K3HlHIsFOt0WrI2/oU9g==}
 
   markdown-table@3.0.4:
     resolution: {integrity: sha512-wiYz4+JrLyb/DqW2hkFJxP7Vd7JuTDm77fvbM8VfEQdmSMqcImWeeRbHwZjBjIFki/VaMK2BhFi7oUUZeM5bqw==}
@@ -6329,6 +6332,10 @@ snapshots:
       unplugin: 2.3.11
 
   magic-string@0.30.21:
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.5.5
+
+  magic-string@1.1.0:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
 
