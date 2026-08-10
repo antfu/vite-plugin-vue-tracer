@@ -6,6 +6,7 @@ import { resolveModulePath } from 'exsolve'
 import MagicString from 'magic-string'
 import { relative } from 'pathe'
 import { SourceMapConsumer } from 'source-map-js'
+import { searchForWorkspaceRoot } from 'vite'
 import { getRecordImportPath } from './utils'
 
 const functions = [
@@ -122,7 +123,8 @@ export function VueTracer(options?: VueTracerOptions): Plugin | undefined {
       if (!hit)
         return
 
-      const related = relative(process.cwd(), id)
+      const workspaceRoot = searchForWorkspaceRoot(process.cwd())
+      const related = relative(workspaceRoot, id)
       s.prepend(`import { recordPosition as _tracerRecordPosition } from ${JSON.stringify(getRecordPath(id))}\n`)
       s.append(`\nfunction _tracer(line, column, vnode) { return _tracerRecordPosition(${JSON.stringify(related)}, line, column, vnode) }\n`)
       return {
