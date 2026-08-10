@@ -11,34 +11,34 @@ packages:
 
 catalogs:
   dev:
-    '@antfu/eslint-config': ^9.0.0
-    '@antfu/ni': ^30.1.0
+    '@antfu/eslint-config': ^9.3.0
+    '@antfu/ni': ^30.5.0
     '@antfu/utils': ^9.3.0
-    '@types/node': ^25.8.0
-    '@unocss/preset-mini': ^66.6.8
-    '@unocss/reset': ^66.6.8
-    '@vitejs/devtools': ^0.1.23
-    '@vitejs/devtools-kit': ^0.1.23
-    '@vitejs/plugin-vue': ^6.0.6
-    baseline-browser-mapping: ^2.10.29
-    bumpp: ^11.1.0
-    eslint: ^10.3.0
+    '@types/node': ^26.2.0
+    '@unocss/preset-mini': ^66.7.5
+    '@unocss/reset': ^66.7.5
+    '@vitejs/devtools': ^0.4.12
+    '@vitejs/devtools-kit': ^0.4.12
+    '@vitejs/plugin-vue': ^6.0.8
+    baseline-browser-mapping: ^2.11.13
+    bumpp: ^12.2.0
+    eslint: ^10.8.1
     nano-staged: ^1.0.2
     simple-git-hooks: ^2.13.1
-    tsx: ^4.22.0
+    tsx: ^4.23.11
     typescript: ^6.0.3
     unbuild: ^3.6.1
-    unocss: ^66.6.8
-    vite: ^8.0.13
-    vite-plugin-inspect: ^11.3.3
-    vitest: ^4.1.6
-    vue: ^3.5.34
-    vue-tsc: ^3.2.9
+    unocss: ^66.7.5
+    vite: ^8.2.1
+    vite-plugin-inspect: ^12.0.2
+    vitest: ^4.1.10
+    vue: ^3.5.41
+    vue-tsc: ^3.3.9
   frontend:
-    nanoevents: ^9.1.0
+    nanoevents: ^10.0.0
   prod:
     estree-walker: ^3.0.3
-    exsolve: ^1.0.8
+    exsolve: ^1.1.1
     magic-string: ^1.1.0
     pathe: ^2.0.3
     source-map-js: ^1.2.1
@@ -46,3 +46,11 @@ onlyBuiltDependencies:
   - esbuild
   - simple-git-hooks
   - unrs-resolver
+
+update:
+  ignoreDeps:
+    - typescript@7
+
+allowBuilds:
+  esbuild: true
+  simple-git-hooks: true
