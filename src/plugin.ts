@@ -4,9 +4,10 @@ import process from 'node:process'
 import { walk } from 'estree-walker'
 import { resolveModulePath } from 'exsolve'
 import MagicString from 'magic-string'
-import { dirname, isAbsolute, relative } from 'pathe'
+import { relative } from 'pathe'
 import { SourceMapConsumer } from 'source-map-js'
 import { searchForWorkspaceRoot } from 'vite'
+import { getRecordImportPath } from './utils'
 
 const functions = [
   'h',
@@ -54,14 +55,8 @@ export function VueTracer(options?: VueTracerOptions): Plugin | undefined {
     return
 
   const pathRecordDist = resolveModulePath('vite-plugin-vue-tracer/client/record', { from: import.meta.url })
-  const getRecordPath = (id: string): string => {
-    if (!resolveRecordEntryPath)
-      return 'vite-plugin-vue-tracer/client/record'
-    let related = relative(dirname(id), pathRecordDist)
-    if (!related.startsWith('./') && !isAbsolute(related))
-      related = `./${related}`
-    return related
-  }
+  const getRecordPath = (id: string): string =>
+    getRecordImportPath(id, pathRecordDist, resolveRecordEntryPath)
 
   return {
     name: 'vite-plugin-vue-tracer',

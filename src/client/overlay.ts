@@ -11,6 +11,7 @@ export const state = reactive<{
   isAnimated: boolean
   isFocused: boolean
   main?: ElementTraceInfo
+  mainRect?: DOMRect
   sub: {
     rects?: { id: string, rect: DOMRect }[]
   }
@@ -98,8 +99,8 @@ function createOverlay(): void {
   })
 
   watchEffect(() => {
-    if (state.main && state.main.rect) {
-      const rect = state.main.rect
+    if (state.main && state.mainRect) {
+      const rect = state.mainRect
       mainRect.style.opacity = '1'
       if (state.isFocused) {
         mainRect.setAttribute('rx', '8')
@@ -190,11 +191,13 @@ function update(result: ElementTraceInfo | undefined): void {
     state.isVisible = false
     state.sub.rects = undefined
     state.main = undefined
+    state.mainRect = undefined
     return
   }
 
   state.isVisible = true
   state.main = result
+  state.mainRect = result.rect
 
   const samePos = result.getElementsSamePosition()
   state.sub.rects = samePos?.map(el => ({
