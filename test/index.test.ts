@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { getRecordImportPath } from '../src/plugin'
+import { getRecordImportPath } from '../src/utils'
 
 const RECORD_DIST = '/project/node_modules/vite-plugin-vue-tracer/dist/client/record.mjs'
 const BARE = 'vite-plugin-vue-tracer/client/record'
