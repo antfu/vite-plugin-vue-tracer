@@ -20,12 +20,12 @@ catalogs:
     '@vitejs/devtools': ^0.4.12
     '@vitejs/devtools-kit': ^0.4.12
     '@vitejs/plugin-vue': ^6.0.8
-    baseline-browser-mapping: ^2.11.13
-    bumpp: ^12.2.0
+    baseline-browser-mapping: ^2.11.15
+    bumpp: ^12.2.1
     eslint: ^10.8.1
     nano-staged: ^1.0.2
     simple-git-hooks: ^2.13.1
-    tsx: ^4.23.11
+    tsx: ^4.23.12
     typescript: ^6.0.3
     unbuild: ^3.6.1
     unocss: ^66.7.5
@@ -33,13 +33,13 @@ catalogs:
     vite-plugin-inspect: ^12.0.2
     vitest: ^4.1.10
     vue: ^3.5.41
-    vue-tsc: ^3.3.9
+    vue-tsc: ^3.3.10
   frontend:
     nanoevents: ^10.0.0
   prod:
     estree-walker: ^3.0.3
     exsolve: ^1.1.1
-    magic-string: ^1.1.0
+    magic-string: ^1.2.0
     pathe: ^2.0.3
     source-map-js: ^1.2.1
 onlyBuiltDependencies:
