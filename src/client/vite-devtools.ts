@@ -5,6 +5,9 @@ import { state } from 'vite-plugin-vue-tracer/client/overlay'
 
 export default function clientScriptSetup(ctx: DockClientScriptContext): void {
   ctx.current.events.on('entry:activated', () => {
+    // Return focus to the inspected page when activated from a popup.
+    window.focus()
+
     events.on('click', (e) => {
       ctx.rpc.call('vite:core:open-in-editor', `${e.pos[0]}:${e.pos[1]}:${e.pos[2]}`)
       state.isVisible = false
