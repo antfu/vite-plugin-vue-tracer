@@ -15,6 +15,10 @@ interface Store {
   fileToVNode: Map<string, WeakSet<any>>
   posToVNode: Map<string, Map<number, Map<number, WeakSet<any>>>>
   events?: any
+  devtools?: {
+    bindings: WeakMap<object, () => void>
+    stopActive?: () => void
+  }
 }
 
 // Storing to global to allow multiple instanace to coexist
