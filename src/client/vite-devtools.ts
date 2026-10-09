@@ -23,6 +23,8 @@ export default function clientScriptSetup(ctx: DockClientScriptContext): void {
     state.isEnabled = false
   }
   const activate = (): void => {
+    // Return focus to the inspected page when activated from a popup.
+    window.focus()
     devtools.stopActive?.()
     devtools.stopActive = stop
     offClick = events.on('click', (e) => {
