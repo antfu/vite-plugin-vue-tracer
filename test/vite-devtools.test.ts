@@ -17,7 +17,10 @@ vi.mock('vite-plugin-vue-tracer/client/listeners', () => ({
 vi.mock('vite-plugin-vue-tracer/client/overlay', () => ({ state: tracer.state }))
 
 let clicks: ReturnType<typeof createNanoEvents>
+let focus: ReturnType<typeof vi.fn>
 beforeEach(() => {
+  focus = vi.fn()
+  vi.stubGlobal('window', { focus })
   clicks = createNanoEvents()
   tracer.events.on.mockImplementation(clicks.on.bind(clicks))
   tracer.store = {}
@@ -43,6 +46,14 @@ it.each([true, false])('handles one element click per activation with repeated s
     expect(c.switchEntry).toHaveBeenCalledTimes(cycle + 1)
     expect(clicks.events.click).toHaveLength(0)
   }
+})
+
+it('focuses the inspected page on activation', () => {
+  const c = context()
+  setup(c.ctx)
+  expect(focus).not.toHaveBeenCalled()
+  c.events.emit('entry:activated')
+  expect(focus).toHaveBeenCalledOnce()
 })
 
 it('removes the click handler when selection is cancelled', () => {
