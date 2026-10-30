@@ -17,8 +17,8 @@ catalogs:
     '@types/node': ^26.2.0
     '@unocss/preset-mini': ^66.7.5
     '@unocss/reset': ^66.7.5
-    '@vitejs/devtools': ^0.4.12
-    '@vitejs/devtools-kit': ^0.4.12
+    '@vitejs/devtools': ^0.8.0
+    '@vitejs/devtools-kit': ^0.8.0
     '@vitejs/plugin-vue': ^6.0.8
     baseline-browser-mapping: ^2.11.15
     bumpp: ^12.2.1

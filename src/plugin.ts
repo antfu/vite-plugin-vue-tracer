@@ -20,12 +20,6 @@ const functions = [
 
 const DOCK_ID = 'vue-tracer'
 
-// Fields from devframes/devframe#469; hubs without it ignore them.
-interface DockEntryExtras {
-  description?: string
-  toggle?: boolean
-}
-
 const testRe = new RegExp(`\\b(?:${functions.join('|')})\\(`)
 
 export interface VueTracerOptions {
@@ -162,7 +156,7 @@ export function VueTracer(options?: VueTracerOptions): Plugin | undefined {
           devtools: {
             setup(ctx) {
               const { onPick = 'open-in-editor' } = devtoolsOptions
-              const entry: DevToolsViewAction & DockEntryExtras = {
+              const entry: DevToolsViewAction = {
                 id: DOCK_ID,
                 title: 'Inspect Vue component',
                 description: onPick === 'none'
