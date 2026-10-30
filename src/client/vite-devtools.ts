@@ -22,14 +22,6 @@ function createClientScriptSetup(options: SetupOptions): (ctx: DockClientScriptC
     devtools.bindings.get(dockEvents)?.()
 
     const docks = ctx.docks as Docks
-    const finish = (): void => {
-      // A hub with toggle actions restores the panel the tool hid.
-      if (typeof docks.setActionActive === 'function')
-        docks.setActionActive(ctx.current.entryMeta.id, false)
-      else
-        docks.switchEntry(null)
-    }
-
     let offClick: (() => void) | undefined
     const stop = (): void => {
       offClick?.()
@@ -51,7 +43,8 @@ function createClientScriptSetup(options: SetupOptions): (ctx: DockClientScriptC
         stop()
         if (options.openInEditor)
           ctx.rpc.call('vite:core:open-in-editor', `${e.pos[0]}:${e.pos[1]}:${e.pos[2]}`)
-        finish()
+        // Hubs with toggle actions restore the panel the tool hid.
+        docks.setActionActive?.(ctx.current.entryMeta.id, false) ?? docks.switchEntry(null)
       })
       isEnabled.value = true
       state.isVisible = true
