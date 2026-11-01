@@ -1,7 +1,7 @@
 import type { DockClientScriptContext } from '@vitejs/devtools-kit/client'
 import { createNanoEvents } from 'nanoevents'
 import { beforeEach, expect, it, vi } from 'vitest'
-import setup from '../src/client/vite-devtools'
+import setup, { pickOnly } from '../src/client/vite-devtools'
 
 const tracer = vi.hoisted(() => ({
   events: { on: vi.fn() },
@@ -31,8 +31,23 @@ function context() {
   const events = createNanoEvents()
   const call = vi.fn()
   const switchEntry = vi.fn(() => events.emit('entry:deactivated'))
-  const ctx = { current: { events }, rpc: { call }, docks: { switchEntry } } as unknown as DockClientScriptContext
+  const ctx = {
+    current: { events, entryMeta: { id: 'vue-tracer' } },
+    rpc: { call },
+    docks: { switchEntry },
+  } as unknown as DockClientScriptContext
   return { ctx, events, call, switchEntry }
+}
+
+// A hub with toggle actions (devframes/devframe#469).
+function toggleContext() {
+  const c = context()
+  const setActionActive = vi.fn(async () => {
+    c.events.emit('entry:deactivated')
+    return true
+  })
+  Object.assign(c.ctx.docks, { setActionActive })
+  return { ...c, setActionActive }
 }
 
 it.each([true, false])('handles one element click per activation with repeated setup: %s', (repeatSetup) => {
@@ -112,4 +127,42 @@ it('shares subscription ownership across separately loaded script modules', asyn
   clicks.emit('click', { pos: ['Component.vue', 10, 2] })
   expect(c.call).toHaveBeenCalledOnce()
   expect(c.events.events['entry:activated']).toHaveLength(1)
+})
+
+it('turns the toggle action off after a pick instead of clearing the selection', () => {
+  const c = toggleContext()
+  setup(c.ctx)
+  for (let cycle = 0; cycle < 2; cycle++) {
+    c.events.emit('entry:activated')
+    expect(tracer.isEnabled.value).toBe(true)
+    clicks.emit('click', { pos: ['Component.vue', 10, 2] })
+    expect(c.call).toHaveBeenCalledTimes(cycle + 1)
+    expect(c.setActionActive).toHaveBeenLastCalledWith('vue-tracer', false)
+    expect(tracer.isEnabled.value).toBe(false)
+  }
+  expect(c.switchEntry).not.toHaveBeenCalled()
+})
+
+it('stops a toggle action when the hub turns it off', () => {
+  const c = toggleContext()
+  setup(c.ctx)
+  c.events.emit('entry:activated')
+  c.events.emit('entry:deactivated')
+  clicks.emit('click', { pos: ['Component.vue', 10, 2] })
+  expect(c.call).not.toHaveBeenCalled()
+  expect(c.setActionActive).not.toHaveBeenCalled()
+  expect(tracer.isEnabled.value).toBe(false)
+})
+
+it.each([
+  ['with', toggleContext],
+  ['without', context],
+])('leaves the pick to the host in pick-only mode %s toggle actions', (_, create) => {
+  const c = create()
+  pickOnly(c.ctx)
+  c.events.emit('entry:activated')
+  clicks.emit('click', { pos: ['Component.vue', 10, 2] })
+  expect(c.call).not.toHaveBeenCalled()
+  expect(tracer.isEnabled.value).toBe(false)
+  expect(clicks.events.click).toHaveLength(0)
 })

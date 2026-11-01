@@ -71,6 +71,37 @@ if (import.meta.hot) {
 }
 ```
 
+### Vite DevTools
+
+With [Vite DevTools](https://github.com/vitejs/devtools), enable `viteDevtools` to add an **Inspect Vue component** button to the dock:
+
+```ts
+VueTracer({
+  viteDevtools: true,
+})
+```
+
+Click the button, then click an element on the page to open its component in your editor. The button is an on/off tool: while it is on, an open DevTools panel is hidden, and it comes back after the pick. Click the button again or press `Escape` to cancel. The `Mod+Shift+X` shortcut (`Cmd` on macOS, `Ctrl` elsewhere) toggles it too, and can be changed in the DevTools settings.
+
+> [!NOTE]
+> The on/off behavior needs a hub with toggle actions ([devframes/devframe#469](https://github.com/devframes/devframe/pull/469)). On older versions, each click on the button starts a pick, and the panel closes after it.
+
+To handle the picked element yourself instead of opening the editor, set `onPick: 'none'` and listen to the `click` event:
+
+```ts
+VueTracer({
+  viteDevtools: { onPick: 'none' },
+})
+```
+
+```ts
+import('vite-plugin-vue-tracer/client/listeners').then(({ events }) => {
+  events.on('click', (info) => {
+    // show your own UI for `info`
+  })
+})
+```
+
 ## References
 
 ### Exports
