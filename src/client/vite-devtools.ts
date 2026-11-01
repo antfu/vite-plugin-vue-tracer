@@ -4,8 +4,7 @@ import { events, getInternalStore, isEnabled } from 'vite-plugin-vue-tracer/clie
 import { state } from 'vite-plugin-vue-tracer/client/overlay'
 
 interface SetupOptions {
-  /** Open the picked element in the editor. */
-  openInEditor: boolean
+  onPick: 'open-in-editor' | 'none' | 'host'
 }
 
 function createClientScriptSetup(options: SetupOptions): (ctx: DockClientScriptContext) => void {
@@ -34,8 +33,14 @@ function createClientScriptSetup(options: SetupOptions): (ctx: DockClientScriptC
       devtools.stopActive?.()
       devtools.stopActive = stop
       offClick = events.on('click', (e) => {
+        // The host shows its own UI for the pick and turns the tool off itself.
+        // Without toggle actions there is no "on" state to keep, so end the pick.
+        if (options.onPick === 'host' && 'setActionActive' in ctx.docks) {
+          isEnabled.value = false
+          return
+        }
         stop()
-        if (options.openInEditor)
+        if (options.onPick === 'open-in-editor')
           ctx.rpc.call('vite:core:open-in-editor', `${e.pos[0]}:${e.pos[1]}:${e.pos[2]}`)
         // Hubs before devframe 1.3 have no toggle actions; there, clear the selection.
         ctx.docks.setActionActive?.(ctx.current.entryMeta.id, false) ?? ctx.docks.switchEntry(null)
@@ -56,10 +61,16 @@ function createClientScriptSetup(options: SetupOptions): (ctx: DockClientScriptC
   }
 }
 
-export default createClientScriptSetup({ openInEditor: true })
+export default createClientScriptSetup({ onPick: 'open-in-editor' })
 
 /**
  * Picks without opening the editor, for hosts that handle the `click` event
  * from `vite-plugin-vue-tracer/client/listeners` themselves.
  */
-export const pickOnly = createClientScriptSetup({ openInEditor: false })
+export const pickOnly = createClientScriptSetup({ onPick: 'none' })
+
+/**
+ * Like {@link pickOnly}, but keeps the tool on after a pick until the host
+ * turns it off.
+ */
+export const hostPick = createClientScriptSetup({ onPick: 'host' })

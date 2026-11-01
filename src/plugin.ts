@@ -54,10 +54,15 @@ export interface VueTracerViteDevtoolsOptions {
    * - `'open-in-editor'`: open its source in the editor.
    * - `'none'`: only end the pick. Use it when you handle the `click` event
    *   from `vite-plugin-vue-tracer/client/listeners` yourself.
+   * - `'host'`: like `'none'`, but the tool stays on after a pick, with the
+   *   overlay frozen on the picked element and the DevTools panel still
+   *   hidden. Turn it off with `docks.setActionActive('vue-tracer', false)`
+   *   when your own UI for the pick is done. Needs a hub with toggle actions
+   *   (devframe 1.3); on older hubs it behaves like `'none'`.
    *
    * @default 'open-in-editor'
    */
-  onPick?: 'open-in-editor' | 'none'
+  onPick?: 'open-in-editor' | 'none' | 'host'
 }
 
 export function VueTracer(options?: VueTracerOptions): Plugin | undefined {
@@ -159,15 +164,15 @@ export function VueTracer(options?: VueTracerOptions): Plugin | undefined {
               const entry: DevToolsViewAction = {
                 id: DOCK_ID,
                 title: 'Inspect Vue component',
-                description: onPick === 'none'
-                  ? 'Pick an element on the page to inspect its Vue component'
-                  : 'Pick an element on the page to open its Vue component in the editor',
+                description: onPick === 'open-in-editor'
+                  ? 'Pick an element on the page to open its Vue component in the editor'
+                  : 'Pick an element on the page to inspect its Vue component',
                 icon: 'ph:crosshair-simple-duotone',
                 type: 'action',
                 toggle: true,
                 action: {
                   importFrom: 'vite-plugin-vue-tracer/client/vite-devtools',
-                  importName: onPick === 'none' ? 'pickOnly' : 'default',
+                  importName: { 'open-in-editor': 'default', 'none': 'pickOnly', 'host': 'hostPick' }[onPick],
                 },
               }
               ctx.docks.register(entry)

@@ -102,6 +102,14 @@ import('vite-plugin-vue-tracer/client/listeners').then(({ events }) => {
 })
 ```
 
+With `'none'`, the tool turns off right after the pick, and the DevTools panel the user had open comes back. If your UI for the pick is shown on the page, for example a popup at the cursor, use `onPick: 'host'` instead. Then the tool stays on after a pick: the overlay stays on the picked element and stops following the mouse, and the panel stays hidden. Turn the tool off when your UI is done:
+
+```ts
+docks.setActionActive('vue-tracer', false) // `docks` from the DevTools client context
+```
+
+The user can also turn it off by pressing `Escape` or clicking the button again. To let the user pick another element before that, set `isEnabled.value = true` again. On hubs without toggle actions, `'host'` behaves like `'none'`.
+
 ## References
 
 ### Exports

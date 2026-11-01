@@ -31,9 +31,12 @@ it('registers a toggle dock action that opens the editor', () => {
   }))
 })
 
-it('lets the host handle picks', () => {
-  const ctx = setupDevtools({ viteDevtools: { onPick: 'none' } })
-  expect(ctx.docks.register.mock.calls[0][0].action.importName).toBe('pickOnly')
+it.each([
+  ['none', 'pickOnly'],
+  ['host', 'hostPick'],
+] as const)('lets the host handle picks with onPick: %s', (onPick, importName) => {
+  const ctx = setupDevtools({ viteDevtools: { onPick } })
+  expect(ctx.docks.register.mock.calls[0][0].action.importName).toBe(importName)
 })
 
 it('registers a command that toggles the dock action', () => {

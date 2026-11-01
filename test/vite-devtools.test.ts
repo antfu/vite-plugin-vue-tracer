@@ -1,7 +1,7 @@
 import type { DockClientScriptContext } from '@vitejs/devtools-kit/client'
 import { createNanoEvents } from 'nanoevents'
 import { beforeEach, expect, it, vi } from 'vitest'
-import setup, { pickOnly } from '../src/client/vite-devtools'
+import setup, { hostPick, pickOnly } from '../src/client/vite-devtools'
 
 const tracer = vi.hoisted(() => ({
   events: { on: vi.fn() },
@@ -165,4 +165,40 @@ it.each([
   expect(c.call).not.toHaveBeenCalled()
   expect(tracer.isEnabled.value).toBe(false)
   expect(clicks.events.click).toHaveLength(0)
+})
+
+it('keeps the tool on after a pick until the host turns it off', () => {
+  const c = toggleContext()
+  hostPick(c.ctx)
+  c.events.emit('entry:activated')
+  clicks.emit('click', { pos: ['Component.vue', 10, 2] })
+  // The overlay stays on the picked element but stops following the mouse.
+  expect(tracer.isEnabled.value).toBe(false)
+  expect(tracer.state.isVisible).toBe(true)
+  expect(c.call).not.toHaveBeenCalled()
+  expect(c.setActionActive).not.toHaveBeenCalled()
+
+  // The host may pick again before turning the tool off.
+  tracer.isEnabled.value = true
+  clicks.emit('click', { pos: ['Component.vue', 12, 4] })
+  expect(tracer.isEnabled.value).toBe(false)
+  expect(c.setActionActive).not.toHaveBeenCalled()
+
+  c.events.emit('entry:deactivated')
+  expect(tracer.state).toMatchObject({ isVisible: false, isEnabled: false })
+  expect(clicks.events.click).toHaveLength(0)
+
+  c.events.emit('entry:activated')
+  expect(tracer.isEnabled.value).toBe(true)
+  expect(tracer.state.isVisible).toBe(true)
+})
+
+it('ends the pick in host mode without toggle actions', () => {
+  const c = context()
+  hostPick(c.ctx)
+  c.events.emit('entry:activated')
+  clicks.emit('click', { pos: ['Component.vue', 10, 2] })
+  expect(c.call).not.toHaveBeenCalled()
+  expect(c.switchEntry).toHaveBeenCalledOnce()
+  expect(tracer.state.isVisible).toBe(false)
 })
